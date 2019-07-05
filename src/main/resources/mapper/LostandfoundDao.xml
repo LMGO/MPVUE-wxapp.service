@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.prg//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wx.demo.dao.LostandfoundDao">
+    <select id="queryLostandfound" resultType="com.wx.demo.entity.Lostandfound">
+        SELECT *
+        FROM lostandfound
+        ORDER BY lf_time
+        DESC
+    </select>
+    <insert id="insertLostandfound" useGeneratedKeys="true"  parameterType="com.wx.demo.entity.Lostandfound">
+        INSERT INTO
+        lostandfound(lf_id, lf_des, user_id, lf_theme, lf_time, user_nickname, user_head)
+        VALUES
+        ('${lfId}', '${lfDes}', '${userId}', '${lfTheme}', '${lfTime}', '${userNickname}', '${userHead}')
+    </insert>
+    <delete id="deleteLostandfound">
+        DELETE FROM
+        lostandfound
+        WHERE
+        lf_id=#{lfId}
+    </delete>
+    <insert id="insertComment" parameterType="com.wx.demo.entity.Lfcomment">
+        INSERT INTO
+        lfcomment(lfcomment_id, user_id, user_nickname, lfcomment_content, lf_id)
+        VALUES('${lfcommentId}', '${userId}', '${userNickname}', '${lfcommentContent}', '${lfId}')
+    </insert>
+    <select id="queryComment" resultType="com.wx.demo.entity.Lfcomment">
+        SELECT *
+        FROM lfcomment
+        WHERE lf_id=#{lfId}
+    </select>
+    <select id="queryMy" resultType="com.wx.demo.entity.Lostandfound">
+        SELECT *
+        FROM lostandfound
+        WHERE user_id=#{userId}
+        ORDER BY lf_time
+        DESC
+    </select>
+    <select id="queryCommentcount" resultType= "java.lang.Integer">
+        SELECT count(*)
+        FROM lfcomment
+        WHERE lf_id=#{lfId}
+    </select>
+    <update id="updateFound" parameterType="com.wx.demo.entity.Lostandfound">
+        UPDATE lostandfound
+        SET lf_found=lf_found+1
+        WHERE lf_Id=#{lfId}
+    </update>
+    <update id="updateNotfound" parameterType="com.wx.demo.entity.Lostandfound">
+        UPDATE lostandfound
+        SET lf_found=lf_found-1
+        WHERE lf_Id=#{lfId}
+    </update>
+</mapper>

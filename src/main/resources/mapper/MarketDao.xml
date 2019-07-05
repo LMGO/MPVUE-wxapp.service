@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.prg//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wx.demo.dao.MarketDao">
+    <select id="queryMarket" resultType="com.wx.demo.entity.Market">
+        SELECT *
+        FROM market
+        ORDER BY market_time
+        DESC
+    </select>
+    <insert id="insertMarket" useGeneratedKeys="true"  parameterType="com.wx.demo.entity.Market">
+        INSERT INTO
+        market(market_id, market_theme, market_des, user_id, market_time, user_nickname, user_head)
+        VALUES
+        ('${marketId}', '${marketTheme}', '${marketDes}', '${userId}', '${marketTime}', '${userNickname}', '${userHead}')
+    </insert>
+    <delete id="deleteMarket">
+        DELETE FROM
+        market
+        WHERE
+        market_id=#{marketId}
+    </delete>
+    <update id="upMarket" parameterType="com.wx.demo.entity.Market">
+        UPDATE
+        market
+        SET market_up=market_up + 1
+        WHERE market_id=#{marketId}
+    </update>
+    <update id="downMarket" parameterType="com.wx.demo.entity.Market">
+        UPDATE
+        market
+        SET market_up=market_up - 1
+        WHERE market_id=#{marketId}
+    </update>
+    <insert id="insertUp" parameterType="com.wx.demo.entity.Marup">
+        INSERT INTO
+        marup(market_id, user_id, up_yes)
+        VALUES('${marketId}', '${userId}', '${upYes}')
+    </insert>
+    <delete id="deleteUp" parameterType="com.wx.demo.entity.Marup">
+        DELETE FROM
+        marup
+        WHERE
+        market_id=#{marketId} AND user_id=#{userId}
+    </delete>
+    <insert id="insertComment" parameterType="com.wx.demo.entity.Marcomment">
+        INSERT INTO
+        marcomment(marcomment_id, user_id, user_nickname, marcomment_content, market_id)
+        VALUES('${marcommentId}', '${userId}', '${userNickname}', '${marcommentContent}', '${marketId}')
+    </insert>
+    <select id="upJudge" resultType="com.wx.demo.entity.Marup">
+        SELECT *
+        FROM marup
+        WHERE market_id=#{marketId} AND user_id=#{userId}
+    </select>
+    <select id="queryComment" resultType="com.wx.demo.entity.Marcomment">
+        SELECT *
+        FROM marcomment
+        WHERE market_id=#{marketId}
+    </select>
+    <select id="queryMy" resultType="com.wx.demo.entity.Market">
+        SELECT *
+        FROM market
+        WHERE user_id=#{userId}
+        ORDER BY market_time
+        DESC
+    </select>
+    <select id="queryCommentcount" resultType= "java.lang.Integer">
+        SELECT count(*)
+        FROM marcomment
+        WHERE market_id=#{marketId}
+    </select>
+    <update id="updateDeal" parameterType="com.wx.demo.entity.Market">
+        UPDATE market
+        SET market_deal=market_deal+1
+        WHERE market_Id=#{marketId}
+    </update>
+    <update id="updateNotDeal" parameterType="com.wx.demo.entity.Market">
+        UPDATE market
+        SET market_deal=market_deal-1
+        WHERE market_Id=#{marketId}
+    </update>
+</mapper>

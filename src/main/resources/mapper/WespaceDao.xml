@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.prg//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wx.demo.dao.WespaceDao">
+    <select id="queryWespace" resultType="com.wx.demo.entity.Wespace">
+        SELECT *
+        FROM wespace
+        ORDER BY micro_time
+        DESC
+    </select>
+    <insert id="insertWespace" useGeneratedKeys="true"  parameterType="com.wx.demo.entity.Wespace">
+        INSERT INTO
+        wespace(micro_id, micro_des, user_id, micro_time, user_nickname, user_head)
+        VALUES
+        ('${microId}', '${microDes}', '${userId}', '${microTime}', '${userNickname}', '${userHead}')
+    </insert>
+    <delete id="deleteWespace">
+        DELETE FROM
+        wespace
+        WHERE
+        micro_id=#{microId}
+    </delete>
+    <update id="upWespace" parameterType="com.wx.demo.entity.Wespace">
+        UPDATE
+        wespace
+        SET micro_up=micro_up + 1
+        WHERE micro_id=#{microId}
+    </update>
+    <update id="downWespace" parameterType="com.wx.demo.entity.Wespace">
+        UPDATE
+        wespace
+        SET micro_up=micro_up - 1
+        WHERE micro_id=#{microId}
+    </update>
+    <insert id="insertUp" parameterType="com.wx.demo.entity.Weup">
+        INSERT INTO
+        weup(micro_id, user_id, up_yes)
+        VALUES('${microId}', '${userId}', '${upYes}')
+    </insert>
+    <delete id="deleteUp" parameterType="com.wx.demo.entity.Weup">
+        DELETE FROM
+        weup
+        WHERE
+        micro_id=#{microId} AND user_id=#{userId}
+    </delete>
+    <delete id="deleteUserup" parameterType="com.wx.demo.entity.Weup">
+        DELETE FROM
+        weup
+        WHERE
+        micro_id=#{microId}
+    </delete>
+    <select id="queryUp" resultType="com.wx.demo.entity.Weup">
+        SELECT micro_id, up_yes
+        FROM weup
+        WHERE user_id=#{userId}
+    </select>
+    <insert id="insertComment" parameterType="com.wx.demo.entity.Wecomment">
+        INSERT INTO
+        wecomment(wecomment_id, user_id, user_nickname, wecomment_content, micro_id)
+        VALUES('${wecommentId}', '${userId}', '${userNickname}', '${wecommentContent}', '${microId}')
+    </insert>
+    <select id="upJudge" resultType="com.wx.demo.entity.Weup">
+        SELECT *
+        FROM weup
+        WHERE micro_id=#{microId} AND user_id=#{userId}
+    </select>
+    <select id="queryComment" resultType="com.wx.demo.entity.Wecomment">
+        SELECT *
+        FROM wecomment
+        WHERE micro_id=#{microId}
+    </select>
+    <select id="queryHot" resultType="com.wx.demo.entity.Wespace">
+        SELECT *
+        FROM wespace
+        ORDER BY micro_up
+        DESC
+        LIMIT 2
+    </select>
+    <select id="queryMy" resultType="com.wx.demo.entity.Wespace">
+        SELECT *
+        FROM wespace
+        WHERE user_id=#{microId}
+        ORDER BY micro_time
+        DESC
+    </select>
+    <select id="queryCommentcount" resultType= "java.lang.Integer">
+        SELECT count(*)
+        FROM wecomment
+        WHERE micro_id=#{microId}
+    </select>
+</mapper>

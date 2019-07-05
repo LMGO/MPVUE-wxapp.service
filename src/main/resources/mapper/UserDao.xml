@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.prg//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wx.demo.dao.UserDao">
+    <select id="queryUser" resultType="com.wx.demo.entity.User">
+        SELECT user_id, user_nickname, user_name, user_qq, user_telephone, user_password, user_academy, user_head
+        FROM user
+        ORDER BY user_id
+        ASC
+    </select>
+    <select id="queryUserById" resultType="com.wx.demo.entity.User">
+        SELECT user_id, user_nickname, user_name, user_qq, user_telephone, user_password, user_academy, user_head
+        FROM user
+        WHERE
+        user_id = #{userId} AND user_password = #{userPassword}
+    </select>
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="userId"
+            keyColumn="user_id" parameterType="com.wx.demo.entity.User">
+        INSERT INTO
+        user(user_nickname, user_name, user_qq, user_telephone, user_password, user_academy)
+        VALUES
+        (#{userNickname}, #{userName}, #{userQq}, #{userTelephone}, #{userPassword}, #{userAcademy})
+    </insert>
+    <update id="updateUser" parameterType="com.wx.demo.entity.User">
+        UPDATE user
+        SET
+            user_nickname=#{userNickname},
+<!--            <if test="userName!=null"> user_name=#{userName},</if>-->
+            user_qq=#{userQq},
+            user_telephone=#{userTelephone},
+<!--            <if test="userPassword!=null"> user_password=#{userPassword},</if>-->
+            user_academy=#{userAcademy}
+        WHERE user_id=#{userId}
+    </update>
+    <delete id="deleteUser">
+        DELETE FROM
+        user
+        WHERE
+        user_id=#{userId}
+    </delete>
+    <update id="updatePassword" parameterType="com.wx.demo.entity.User">
+        UPDATE user
+        SET user_Password=#{userPassword}
+        WHERE user_id=#{userId}
+    </update>
+    <update id="updateHead" parameterType="com.wx.demo.entity.User">
+    UPDATE
+    user
+    SET
+    user_head=#{userHead}
+    WHERE user_id=#{userId}
+    </update>
+</mapper>
